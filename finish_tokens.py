@@ -244,7 +244,7 @@ def main():
     args = vars(parser.parse_args())
     print(args)
 
-    tokenLst = makeTokenList(args['tokenListInput'])
+    tokenLst = makeTokenList(" ".join(args['tokenListInput']))
     #print(tokenLst)
 
     tokensPerPage = getTokensPerPage()
