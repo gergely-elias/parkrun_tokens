@@ -17,16 +17,18 @@ TOKEN_SPACING = 2  # mm - space between tokens on the page
 TOKEN_WIDTH = 55  # mm
 TOKEN_HEIGHT = 25  # mm
 BORDER_RADIUS = 3  # mm
-BARCODE_X_OFFSET = 5  # mm
-BARCODE_Y_OFFSET = 6  # mm
-BARCODE_LINE_WIDTH = 0.4  # mm
-BARCODE_LINE_HEIGHT = 10  # mm
+BARCODE_X_OFFSET = 0.5  # mm
+BARCODE_Y_OFFSET = 15  # mm
+BARCODE_LINE_WIDTH = 0.5  # mm
+BARCODE_LINE_HEIGHT = 6.5  # mm
 HOLE_X_OFFSET = 7  # mm
 HOLE_DIA = 4  # mm
 TEXT_Y_OFFSET = 5  # mm
 FOREGROUND_COLOUR = "#000000"  # black
 BACKGROUND_COLOUR = "#ffffff"  # white
+ID_COLOUR = "#ffa300"  #apricot
 FONT_SIZE = 12
+FONT_TYPE = "Arial"
 
 SIZE = "{0:.3f}mm"
 
@@ -116,6 +118,23 @@ def makeToken(tokenVal,titleStr="Parkrun Finish Token"):
     element.appendChild(text_element)
     group.appendChild(element)
 
+    # Write token id
+    element = document.createElement("text")
+    attributes = {
+        "x": SIZE.format(BARCODE_X_OFFSET+2),
+        "y": SIZE.format(BARCODE_Y_OFFSET),
+        "font-weight": "bold",
+        "style": "fill:{};font-size:{}pt;text-anchor:left;font-family:{};".format(
+            ID_COLOUR,
+            FONT_SIZE,
+            FONT_TYPE,
+        ),
+    }
+    barcode.writer._set_attributes(element, **attributes)
+    text_element = document.createTextNode(tokenVal[1:])
+    element.appendChild(text_element)
+    group.appendChild(element)
+    
     # Draw the barcode itself
     elem = document.createElement("svg")
     attributes= { "x": SIZE.format(BARCODE_X_OFFSET),
@@ -125,7 +144,8 @@ def makeToken(tokenVal,titleStr="Parkrun Finish Token"):
     tokenCode = barcode.Code128(tokenVal)
     tokenCodeSvg = tokenCode.render(writer_options={"with_doctype":False,
                                                     "module_width":BARCODE_LINE_WIDTH,
-                                                    "module_height":BARCODE_LINE_HEIGHT})
+                                                    "module_height":BARCODE_LINE_HEIGHT,
+                                                    "write_text":False})
     elem.appendChild(tokenCode.writer._root)
     group.appendChild(elem)
 
