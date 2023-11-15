@@ -11,25 +11,20 @@ import barcode
 ###########################
 # Define Token Parameters #
 ###########################
-PAGE_WIDTH = 290  # mm
-PAGE_HEIGHT = 210  # mm
-TOKEN_X_SPACING = 2  # mm
-TOKEN_Y_SPACING = 2  # mm
-TOKEN_WIDTH = 55  # mm
-TOKEN_HEIGHT = 25  # mm
-BORDER_RADIUS = 3  # mm
+PAGE_WIDTH = 280  # mm
+PAGE_HEIGHT = 192  # mm
+TOKEN_X_SPACING = 10  # mm
+TOKEN_Y_SPACING = 0  # mm
+TOKEN_WIDTH = 43.5  # mm
+TOKEN_HEIGHT = 12.5  # mm
 INLAY_WIDTH = 43.5  # mm
-INLAY_HEIGHT = 13  # mm
-INLAY_X_OFFSET = 1  # mm
-INLAY_Y_OFFSET = 11  # mm
-BARCODE_X_OFFSET = 0.5  # mm
-BARCODE_Y_OFFSET = 15  # mm
+INLAY_HEIGHT = 12.5  # mm
+INLAY_X_OFFSET = 0  # mm
+INLAY_Y_OFFSET = 0  # mm
+BARCODE_X_OFFSET = -0.5  # mm
+BARCODE_Y_OFFSET = 4  # mm
 BARCODE_LINE_WIDTH = 0.5  # mm
 BARCODE_LINE_HEIGHT = 6.5  # mm
-HOLE_X_OFFSET = 7  # mm
-HOLE_DIA = 4  # mm
-TEXT_Y_OFFSET = 5  # mm
-FOREGROUND_COLOUR = "#000000"  # black
 BACKGROUND_COLOUR = "#ffffff"  # white
 ID_COLOUR = "#ffa300"  #apricot
 FONT_SIZE = 12
@@ -84,44 +79,6 @@ def makeToken(tokenVal,titleStr="Parkrun Finish Token"):
     }
     barcode.writer._set_attributes(background, **attributes)
     group.appendChild(background)
-
-    # Draw the token border
-    tokenBorder = document.createElement("rect")
-    attributes = {
-        "width": SIZE.format(TOKEN_WIDTH),
-        "height": SIZE.format(TOKEN_HEIGHT),
-        "rx": SIZE.format(BORDER_RADIUS),
-        "ry": SIZE.format(BORDER_RADIUS),
-        "style": f"fill:transparent; stroke:black; storke-width:3;"
-    }
-    barcode.writer._set_attributes(tokenBorder, **attributes)
-    group.appendChild(tokenBorder)
-
-    # Draw the token hole
-    tokenHole = document.createElement("circle")
-    attributes = {
-        "cx": SIZE.format(TOKEN_WIDTH-HOLE_X_OFFSET),
-        "cy": SIZE.format(TOKEN_HEIGHT/2.),
-        "r": SIZE.format(HOLE_DIA/2.),
-        "style": f"fill:transparent; stroke:black; storke-width:3;"
-    }
-    barcode.writer._set_attributes(tokenHole, **attributes)
-    group.appendChild(tokenHole)
-
-    # Write the title
-    element = document.createElement("text")
-    attributes = {
-        "x": SIZE.format(TOKEN_WIDTH/2.),
-        "y": SIZE.format(TEXT_Y_OFFSET),
-        "style": "fill:{};font-size:{}pt;text-anchor:middle;".format(
-            FOREGROUND_COLOUR,
-            FONT_SIZE,
-        ),
-    }
-    barcode.writer._set_attributes(element, **attributes)
-    text_element = document.createTextNode(titleStr)
-    element.appendChild(text_element)
-    group.appendChild(element)
 
     # Write token id
     element = document.createElement("text")
@@ -194,11 +151,11 @@ def makeTokensPage(tokensList, titleStr="tokenPage"):
         elem.appendChild(makeToken(tokenVal, titleStr=titleStr))
         root.appendChild(elem)
         
-        xpos = xpos + TOKEN_WIDTH + TOKEN_X_SPACING
-        if (xpos>PAGE_WIDTH - TOKEN_WIDTH - TOKEN_X_SPACING):
-            xpos = TOKEN_X_SPACING
-            ypos = ypos + TOKEN_HEIGHT + TOKEN_Y_SPACING
+        ypos = ypos + TOKEN_HEIGHT + TOKEN_Y_SPACING
         if (ypos>PAGE_HEIGHT - TOKEN_HEIGHT - TOKEN_Y_SPACING):
+            ypos = TOKEN_Y_SPACING
+            xpos = xpos + TOKEN_WIDTH + TOKEN_X_SPACING
+        if (xpos>PAGE_WIDTH - TOKEN_WIDTH - TOKEN_X_SPACING):
             print("end of page")
             break
 
