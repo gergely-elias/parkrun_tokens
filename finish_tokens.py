@@ -18,6 +18,10 @@ TOKEN_Y_SPACING = 2  # mm
 TOKEN_WIDTH = 55  # mm
 TOKEN_HEIGHT = 25  # mm
 BORDER_RADIUS = 3  # mm
+INLAY_WIDTH = 43.5  # mm
+INLAY_HEIGHT = 13  # mm
+INLAY_X_OFFSET = 1  # mm
+INLAY_Y_OFFSET = 11  # mm
 BARCODE_X_OFFSET = 0.5  # mm
 BARCODE_Y_OFFSET = 15  # mm
 BARCODE_LINE_WIDTH = 0.5  # mm
@@ -149,6 +153,18 @@ def makeToken(tokenVal,titleStr="Parkrun Finish Token"):
                                                     "write_text":False})
     elem.appendChild(tokenCode.writer._root)
     group.appendChild(elem)
+
+    # Draw the inlay borders
+    inlayBorder = document.createElement("rect")
+    attributes = {
+        "width": SIZE.format(INLAY_WIDTH),
+        "height": SIZE.format(INLAY_HEIGHT),
+        "x": SIZE.format(INLAY_X_OFFSET),
+        "y": SIZE.format(INLAY_Y_OFFSET),
+        "style": f"fill:transparent; stroke:gray; storke-width:1;"
+    }
+    barcode.writer._set_attributes(inlayBorder, **attributes)
+    group.appendChild(inlayBorder)
 
     # Return the xml dom (not the xml text)
     return(root)
